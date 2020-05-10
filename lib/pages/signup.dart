@@ -68,6 +68,7 @@ class _SignupState extends State<Signup> {
                     width: MediaQuery.of(context).size.width / 2.5,
                     child: RaisedButton(
                         onPressed: () {},
+                        color: Colors.grey[300],
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Row(
