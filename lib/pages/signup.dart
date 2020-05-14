@@ -61,16 +61,16 @@ class _SignupState extends State<Signup> {
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height / 20),
                     CustomTextFormField(
-                      hintText: 'Username',
+                      hintText: 'Email',
                       validator: (String value) {
                         if (value.isEmpty) {
-                          return 'Enter username';
+                          return 'Enter email';
                         }
                         return null;
                       },
                       onSaved: (String value) {
                         setState(() {
-                          user.username = value;
+                          user.email = value;
                         });
                       },
                       isPassword: false,

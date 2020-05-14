@@ -1,7 +1,7 @@
 class UserModel {
   String fullName;
-  String username;
+  String email;
   String password;
 
-  UserModel({this.fullName, this.username, this.password});
+  UserModel({this.fullName, this.email, this.password});
 }
