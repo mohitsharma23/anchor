@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rss_reader/auth.dart';
 import '../models/User.dart';
 
 class Login extends StatefulWidget {
@@ -9,18 +10,26 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final user = UserModel();
   final _formKey = GlobalKey<FormState>();
+  AuthSerivce auth = new AuthSerivce();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  void validateForm() {
+  void validateForm() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print(user.username);
-      print(user.password);
+      String res = await auth.loginUser(user);
+      if (res == "Success") {
+        //Navigate to home page here
+        print('Home Page');
+      } else {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(res)));
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       body: SafeArea(
         child: SingleChildScrollView(
             child: Padding(
@@ -43,16 +52,16 @@ class _LoginState extends State<Login> {
                 TextFormField(
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Please enter username';
+                      return 'Please enter email';
                     }
                     return null;
                   },
                   onSaved: (value) {
                     setState(() {
-                      user.username = value;
+                      user.email = value;
                     });
                   },
-                  decoration: InputDecoration(hintText: 'Username'),
+                  decoration: InputDecoration(hintText: 'Email'),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height / 15),
                 TextFormField(
