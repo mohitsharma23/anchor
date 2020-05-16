@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rss_reader/auth.dart';
 import 'package:rss_reader/models/User.dart';
 
 class Signup extends StatefulWidget {
@@ -11,16 +12,25 @@ class _SignupState extends State<Signup> {
   String confirmPass;
   final user = UserModel();
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  AuthSerivce auth = new AuthSerivce();
 
-  void validateForm() {
+  void validateForm() async {
     if (_formKey.currentState.validate()) {
-      print(user);
+      _formKey.currentState.save();
+      String res = await auth.signupUser(user);
+      if (res == "Success") {
+        //navigate to home page
+      } else {
+        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(res)));
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.teal[400],
         body: SingleChildScrollView(
           child: Padding(

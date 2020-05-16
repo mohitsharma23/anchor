@@ -18,7 +18,7 @@ class _LoginState extends State<Login> {
       _formKey.currentState.save();
       String res = await auth.loginUser(user);
       if (res == "Success") {
-        //Navigate to home page here
+        Navigator.pushNamed(context, '/home');
         print('Home Page');
       } else {
         _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(res)));
