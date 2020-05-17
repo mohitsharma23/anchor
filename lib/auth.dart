@@ -70,4 +70,10 @@ class AuthSerivce {
     }
     return false;
   }
+
+  Future<bool> signOut() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove("token");
+    return true;
+  }
 }

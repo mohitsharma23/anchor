@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rss_reader/sidemenu.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -16,7 +17,7 @@ class _HomeState extends State<Home> {
       body: Center(
         child: Text('Welcome!'),
       ),
-      drawer: Drawer(),
+      drawer: SideMenu(),
     );
   }
 }
