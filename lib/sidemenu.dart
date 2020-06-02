@@ -8,16 +8,23 @@ class SideMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(children: <Widget>[
-        DrawerHeader(
-          padding: EdgeInsets.zero,
-          child: Stack(
-            children: <Widget>[
-              CustomPaint(
-                  size: MediaQuery.of(context).size, painter: CurvePainter()),
-              Padding(
-                  padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
-                  child: CircleAvatar(radius: 40))
-            ],
+        InkWell(
+          onTap: () {
+            if (ModalRoute.of(context).settings.name != PROFILE) {
+              Navigator.pushReplacementNamed(context, PROFILE);
+            }
+          },
+          child: DrawerHeader(
+            padding: EdgeInsets.zero,
+            child: Stack(
+              children: <Widget>[
+                CustomPaint(
+                    size: MediaQuery.of(context).size, painter: CurvePainter()),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
+                    child: CircleAvatar(radius: 40)) //profile image here
+              ],
+            ),
           ),
         ),
         Ink(
