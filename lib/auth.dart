@@ -17,7 +17,8 @@ class AuthSerivce {
 
     Map decode = json.decode(res.body);
     if (res.statusCode == 200) {
-      final flag = await addTokenToSP(decode["token"]);
+      final flag =
+          await addDataToSP(decode["token"], decode["name"], decode["email"]);
       if (flag) {
         return "Success";
       }
@@ -39,7 +40,8 @@ class AuthSerivce {
 
     Map decode = json.decode(res.body);
     if (res.statusCode == 200) {
-      final flag = await addTokenToSP(decode["token"]);
+      final flag =
+          await addDataToSP(decode["token"], decode["name"], decode["email"]);
       if (flag) {
         return "Success";
       }
@@ -47,9 +49,11 @@ class AuthSerivce {
     return decode["message"];
   }
 
-  Future<bool> addTokenToSP(String token) async {
+  Future<bool> addDataToSP(String token, String name, String email) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("token", token);
+    prefs.setString("name", name);
+    prefs.setString("email", email);
     return true;
   }
 

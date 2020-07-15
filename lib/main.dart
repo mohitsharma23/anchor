@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:rss_reader/auth.dart';
 import 'package:rss_reader/pages/home.dart';
 import 'package:rss_reader/pages/login.dart';
+import 'package:rss_reader/pages/profile.dart';
+import 'package:rss_reader/pages/settings.dart';
 import 'package:rss_reader/pages/signup.dart';
+import './config.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,7 +16,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   AuthSerivce auth = new AuthSerivce();
-  bool flag;
+  bool flag = true;
 
   @override
   void initState() {
@@ -34,11 +37,13 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeData(
               primarySwatch: Colors.teal,
             ),
-            initialRoute: '/home', //flag ? '/home' : '/login',
+            initialRoute: flag ? '/home' : '/login', //HOME,
             routes: {
-              '/login': (context) => Login(),
-              '/signup': (context) => Signup(),
-              '/home': (context) => Home()
+              LOGIN: (context) => Login(),
+              SIGNUP: (context) => Signup(),
+              HOME: (context) => Home(),
+              SETTINGS: (context) => Settings(),
+              PROFILE: (context) => Profile()
             },
           );
   }
