@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:rss_reader/sidemenu.dart';
+import 'package:rss_reader/util.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -9,7 +11,30 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final _formKey = GlobalKey<FormState>();
+  UtilService _util = new UtilService();
   String url;
+  List data;
+
+  @override
+  void initState() {
+    super.initState();
+    getFeedData();
+  }
+
+  getFeedData() async {
+    var dataArr = await _util.getAnchors();
+    setState(() {
+      data = dataArr;
+    });
+  }
+
+  _launchURL(url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
 
   void _addAnchor() {
     showDialog(
@@ -51,7 +76,7 @@ class _HomeState extends State<Home> {
                               url = value;
                             });
                           },
-                          decoration: InputDecoration(hintText: 'Enter URL'),
+                          decoration: InputDecoration(hintText: 'google.com'),
                         ),
                       ),
                       Padding(
@@ -82,9 +107,55 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         title: Text('Home'),
       ),
-      body: Center(
-        child: Text('Welcome!'),
-      ),
+      body: this.data == null
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              itemCount: this.data.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  height: 100,
+                  width: double.maxFinite,
+                  child: InkWell(
+                    onTap: () {
+                      _launchURL(this.data[index].values.elementAt(1));
+                    },
+                    child: Card(
+                      elevation: 5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border: Border(
+                                top: BorderSide(width: 2, color: Colors.teal))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                this.data[index].values.elementAt(0),
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.w500),
+                              ),
+                              Container(
+                                width: double.maxFinite,
+                                child: Text(
+                                  this.data[index].values.elementAt(2),
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey),
+                                  textAlign: TextAlign.end,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }),
       floatingActionButton: FloatingActionButton(
           onPressed: _addAnchor, child: FaIcon(FontAwesomeIcons.anchor)),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
