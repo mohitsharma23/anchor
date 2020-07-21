@@ -33,6 +33,23 @@ class UtilService {
     return decode["message"];
   }
 
+  Future<dynamic> getFeed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String email = prefs.getString("email");
+    Map map = {"email": email};
+    String body = json.encode(map);
+
+    final res = await http.post(this.baseURL + "getfeed",
+        headers: {'Content-Type': 'application/json'}, body: body);
+
+    var decode = json.decode(res.body);
+    if (res.statusCode == 200) {
+      // decode.forEach((item) => print(item.values.elementAt(0)));
+      return decode;
+    }
+    return decode["message"];
+  }
+
   Future<dynamic> getAnchors() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = prefs.getString("email");

@@ -22,7 +22,7 @@ class _HomeState extends State<Home> {
   }
 
   getFeedData() async {
-    var dataArr = await _util.getAnchors();
+    var dataArr = await _util.getFeed();
     setState(() {
       data = dataArr;
     });
