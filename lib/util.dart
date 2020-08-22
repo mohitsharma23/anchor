@@ -1,6 +1,7 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './config.dart';
 
@@ -17,7 +18,7 @@ class UtilService {
     return map;
   }
 
-  Future<String> saveAnchor(String url) async {
+  Future<dynamic> saveAnchor(String url) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String email = prefs.getString("email");
     Map map = {"email": email, "url": url};
@@ -26,9 +27,9 @@ class UtilService {
     final res = await http.post(this.baseURL + "addanchor",
         headers: {'Content-Type': 'application/json'}, body: body);
 
-    Map decode = json.decode(res.body);
+    var decode = json.decode(res.body);
     if (res.statusCode == 200) {
-      return "Success";
+      return decode;
     }
     return decode["message"];
   }
@@ -45,6 +46,7 @@ class UtilService {
     var decode = json.decode(res.body);
     if (res.statusCode == 200) {
       // decode.forEach((item) => print(item.values.elementAt(0)));
+      writeToFile(json.encode(decode));
       return decode;
     }
     return decode["message"];
@@ -65,5 +67,56 @@ class UtilService {
       return decode;
     }
     return decode["message"];
+  }
+
+  Future<dynamic> removeAnchor(String url) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String email = prefs.getString("email");
+    Map map = {"email": email, "url": url};
+    String body = json.encode(map);
+
+    final res = await http.post(this.baseURL + "removeanchor",
+        headers: {'Content-Type': 'application/json'}, body: body);
+
+    var decode = json.decode(res.body);
+    if (res.statusCode == 200) {
+      // decode.forEach((item) => print(item.values.elementAt(0)));
+      removeFile();
+      return decode["message"];
+    }
+    return decode["message"];
+  }
+
+//Cache Test
+
+  Future<String> get _localPath async {
+    final directory = await getTemporaryDirectory();
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/feed.txt');
+  }
+
+  Future<File> writeToFile(String feed) async {
+    final file = await _localFile;
+    return file.writeAsString(feed);
+  }
+
+  Future<dynamic> readFeed() async {
+    try {
+      final file = await _localFile;
+      String contents = await file.readAsString();
+
+      return json.decode(contents);
+    } catch (e) {
+      return "Error";
+    }
+  }
+
+  void removeFile() async {
+    final file = await _localFile;
+    file.delete();
   }
 }

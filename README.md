@@ -12,6 +12,9 @@ Todo List:
 - [x] Add profile page
 - [x] Create Node API to fetch documents
 - [x] Displaying fetched documents
+- [x] Optimize fetching data (Saved file in cache)
+- [x] Display all anchors on Profile Page
+- [ ] Delete Cached File after specific Time
 - [ ] Dark Mode
-- [ ] Optimize fetching data
-- [ ] Display all anchors on Profile Page
+- [ ] Design UI of Anchors page
+- [ ] Design Settings page

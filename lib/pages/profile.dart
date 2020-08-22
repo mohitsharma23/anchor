@@ -144,10 +144,12 @@ class _ProfileState extends State<Profile> {
                           final item = this.anchors[index];
                           return Dismissible(
                             key: Key(item),
-                            onDismissed: (direction) {
+                            onDismissed: (direction) async {
                               setState(() {
                                 anchors.removeAt(index);
                               });
+                              String msg = await util.removeAnchor(item);
+                              print(msg);
                             },
                             background: Container(color: Colors.red),
                             child: Container(

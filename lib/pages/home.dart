@@ -18,14 +18,34 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+
     getFeedData();
   }
 
-  getFeedData() async {
-    var dataArr = await _util.getFeed();
-    setState(() {
-      data = dataArr;
-    });
+  Future<void> getFeedData() async {
+    var response = await _util.readFeed();
+    if (response == "Error") {
+      var dataArr = await _util.getFeed();
+      setState(() {
+        data = dataArr;
+      });
+    } else {
+      setState(() {
+        data = response;
+      });
+    }
+  }
+
+  saveAnchor(url) async {
+    var response = await _util.saveAnchor(url);
+    if (response.runtimeType != String) {
+      setState(() {
+        data.addAll(response);
+      });
+    } else {
+      return false;
+    }
+    return true;
   }
 
   _launchURL(url) async {
@@ -86,7 +106,9 @@ class _HomeState extends State<Home> {
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
-                              print(url);
+                              // print(url);
+                              bool check = saveAnchor(url);
+                              Navigator.of(context).pop();
                             }
                           },
                         ),
@@ -111,51 +133,57 @@ class _HomeState extends State<Home> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : ListView.builder(
-              itemCount: this.data.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  height: 100,
-                  width: double.maxFinite,
-                  child: InkWell(
-                    onTap: () {
-                      _launchURL(this.data[index].values.elementAt(1));
-                    },
-                    child: Card(
-                      elevation: 5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                top: BorderSide(width: 2, color: Colors.teal))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                this.data[index].values.elementAt(0),
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
+          : RefreshIndicator(
+              onRefresh: getFeedData,
+              child: ListView.builder(
+                  itemCount: this.data.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                      height: 100,
+                      width: double.maxFinite,
+                      child: InkWell(
+                        onTap: () {
+                          _launchURL(this.data[index].values.elementAt(1));
+                        },
+                        child: Card(
+                          elevation: 5,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    top: BorderSide(
+                                        width: 2, color: Colors.teal))),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    this.data[index].values.elementAt(0),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Container(
+                                    width: double.maxFinite,
+                                    child: Text(
+                                      this.data[index].values.elementAt(2),
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.grey),
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  )
+                                ],
                               ),
-                              Container(
-                                width: double.maxFinite,
-                                child: Text(
-                                  this.data[index].values.elementAt(2),
-                                  style: TextStyle(
-                                      fontSize: 12, color: Colors.grey),
-                                  textAlign: TextAlign.end,
-                                ),
-                              )
-                            ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                );
-              }),
+                    );
+                  }),
+            ),
       floatingActionButton: FloatingActionButton(
           onPressed: _addAnchor, child: FaIcon(FontAwesomeIcons.anchor)),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
