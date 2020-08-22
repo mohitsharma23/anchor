@@ -29,6 +29,7 @@ class UtilService {
 
     var decode = json.decode(res.body);
     if (res.statusCode == 200) {
+      appendToFile(json.encode(decode));
       return decode;
     }
     return decode["message"];
@@ -102,6 +103,11 @@ class UtilService {
   Future<File> writeToFile(String feed) async {
     final file = await _localFile;
     return file.writeAsString(feed);
+  }
+
+  Future<File> appendToFile(String newFeed) async {
+    final file = await _localFile;
+    return file.writeAsString(newFeed, mode: FileMode.append);
   }
 
   Future<dynamic> readFeed() async {

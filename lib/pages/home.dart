@@ -18,17 +18,20 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-
     getFeedData();
   }
 
-  Future<void> getFeedData() async {
+  Future<void> refreshFeedData() async {
+    var dataArr = await _util.getFeed();
+    setState(() {
+      data = dataArr;
+    });
+  }
+
+  getFeedData() async {
     var response = await _util.readFeed();
     if (response == "Error") {
-      var dataArr = await _util.getFeed();
-      setState(() {
-        data = dataArr;
-      });
+      refreshFeedData();
     } else {
       setState(() {
         data = response;
@@ -42,10 +45,7 @@ class _HomeState extends State<Home> {
       setState(() {
         data.addAll(response);
       });
-    } else {
-      return false;
     }
-    return true;
   }
 
   _launchURL(url) async {
@@ -107,7 +107,7 @@ class _HomeState extends State<Home> {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
                               // print(url);
-                              bool check = saveAnchor(url);
+                              saveAnchor(url);
                               Navigator.of(context).pop();
                             }
                           },
@@ -134,7 +134,7 @@ class _HomeState extends State<Home> {
               child: CircularProgressIndicator(),
             )
           : RefreshIndicator(
-              onRefresh: getFeedData,
+              onRefresh: refreshFeedData,
               child: ListView.builder(
                   itemCount: this.data.length,
                   itemBuilder: (context, index) {
