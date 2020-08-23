@@ -22,4 +22,5 @@ Todo List:
 
 ## Screeshots
 
-![Login](https://drive.google.com/uc?export=view&id=1SAgSfNTaFgjs5Y_4tAyiD7egnQAiXcf_){:height="50%" width="50%"}
+<img src="https://drive.google.com/uc?export=view&id=1SAgSfNTaFgjs5Y_4tAyiD7egnQAiXcf_" height="500"> <img src="https://drive.google.com/uc?export=view&id=156PbboYK4rXX72nstusImp20J5Bw_YVb" height="500">
+<img src="https://drive.google.com/uc?export=view&id=1Fr-2zPyadsmgMJpo0uO1RepbkjHmZpaC" height="500"> <img src="https://drive.google.com/uc?export=view&id=15-cnulrmXrCSP5NQk4pcFynplsVK-rde" height="500">
