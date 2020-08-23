@@ -18,3 +18,8 @@ Todo List:
 - [ ] Dark Mode
 - [ ] Design UI of Anchors page
 - [ ] Design Settings page
+- [x] Deploy Node API to Heroku & MongoDB to Atlas DB
+
+## Screeshots
+
+![Login](https://drive.google.com/uc?export=view&id=1SAgSfNTaFgjs5Y_4tAyiD7egnQAiXcf_)
