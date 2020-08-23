@@ -22,4 +22,4 @@ Todo List:
 
 ## Screeshots
 
-![Login](https://drive.google.com/uc?export=view&id=1SAgSfNTaFgjs5Y_4tAyiD7egnQAiXcf_)
+![Login](https://drive.google.com/uc?export=view&id=1SAgSfNTaFgjs5Y_4tAyiD7egnQAiXcf_){:height="50%" width="50%"}
