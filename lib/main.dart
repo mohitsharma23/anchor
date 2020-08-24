@@ -16,16 +16,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   AuthSerivce auth = new AuthSerivce();
-  bool flag = true;
+  bool flag;
 
   @override
   void initState() {
     super.initState();
-    auth.verifyUser().then((val) => {
-          setState(() {
-            flag = val;
-          })
-        });
+    verifyUser();
+  }
+
+  verifyUser() async {
+    bool val = await auth.verifyUser();
+    setState(() {
+      flag = val;
+    });
   }
 
   @override
@@ -37,7 +40,7 @@ class _MyAppState extends State<MyApp> {
             theme: ThemeData(
               primarySwatch: Colors.teal,
             ),
-            initialRoute: flag ? '/home' : '/login', //HOME,
+            initialRoute: flag ? HOME : LOGIN,
             routes: {
               LOGIN: (context) => Login(),
               SIGNUP: (context) => Signup(),

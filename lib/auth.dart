@@ -15,15 +15,18 @@ class AuthSerivce {
     final res = await http.post(baseURL + "signin",
         headers: {'Content-Type': 'application/json'}, body: body);
 
-    Map decode = json.decode(res.body);
-    if (res.statusCode == 200) {
-      final flag =
-          await addDataToSP(decode["token"], decode["name"], decode["email"]);
-      if (flag) {
-        return "Success";
+    if (res.statusCode != 404) {
+      Map decode = json.decode(res.body);
+      if (res.statusCode == 200) {
+        final flag =
+            await addDataToSP(decode["token"], decode["name"], decode["email"]);
+        if (flag) {
+          return "Success";
+        }
       }
+      return decode["message"];
     }
-    return decode["message"];
+    return "Error in fetching";
   }
 
   Future<String> signupUser(UserModel user) async {
@@ -38,15 +41,18 @@ class AuthSerivce {
     final res = await http.post(baseURL + "signup",
         headers: {'Content-Type': 'application/json'}, body: body);
 
-    Map decode = json.decode(res.body);
-    if (res.statusCode == 200) {
-      final flag =
-          await addDataToSP(decode["token"], decode["name"], decode["email"]);
-      if (flag) {
-        return "Success";
+    if (res.statusCode != 404) {
+      Map decode = json.decode(res.body);
+      if (res.statusCode == 200) {
+        final flag =
+            await addDataToSP(decode["token"], decode["name"], decode["email"]);
+        if (flag) {
+          return "Success";
+        }
       }
+      return decode["message"];
     }
-    return decode["message"];
+    return "Error in fetching";
   }
 
   Future<bool> addDataToSP(String token, String name, String email) async {

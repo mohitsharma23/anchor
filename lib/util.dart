@@ -27,12 +27,15 @@ class UtilService {
     final res = await http.post(this.baseURL + "addanchor",
         headers: {'Content-Type': 'application/json'}, body: body);
 
-    var decode = json.decode(res.body);
-    if (res.statusCode == 200) {
-      appendToFile(json.encode(decode));
-      return decode;
+    if (res.statusCode != 404) {
+      var decode = json.decode(res.body);
+      if (res.statusCode == 200) {
+        appendToFile(json.encode(decode));
+        return decode;
+      }
+      return decode["message"];
     }
-    return decode["message"];
+    return "Error in fetching";
   }
 
   Future<dynamic> getFeed() async {
@@ -44,13 +47,16 @@ class UtilService {
     final res = await http.post(this.baseURL + "getfeed",
         headers: {'Content-Type': 'application/json'}, body: body);
 
-    var decode = json.decode(res.body);
-    if (res.statusCode == 200) {
-      // decode.forEach((item) => print(item.values.elementAt(0)));
-      writeToFile(json.encode(decode));
-      return decode;
+    if (res.statusCode != 404) {
+      var decode = json.decode(res.body);
+      if (res.statusCode == 200) {
+        // decode.forEach((item) => print(item.values.elementAt(0)));
+        writeToFile(json.encode(decode));
+        return decode;
+      }
+      return decode["message"];
     }
-    return decode["message"];
+    return "Error in fetching";
   }
 
   Future<dynamic> getAnchors() async {
@@ -62,12 +68,15 @@ class UtilService {
     final res = await http.post(this.baseURL + "getanchors",
         headers: {'Content-Type': 'application/json'}, body: body);
 
-    var decode = json.decode(res.body);
-    if (res.statusCode == 200) {
-      // decode.forEach((item) => print(item.values.elementAt(0)));
-      return decode;
+    if (res.statusCode != 404) {
+      var decode = json.decode(res.body);
+      if (res.statusCode == 200) {
+        // decode.forEach((item) => print(item.values.elementAt(0)));
+        return decode;
+      }
+      return decode["message"];
     }
-    return decode["message"];
+    return "Error in fetching";
   }
 
   Future<dynamic> removeAnchor(String url) async {
@@ -78,14 +87,16 @@ class UtilService {
 
     final res = await http.post(this.baseURL + "removeanchor",
         headers: {'Content-Type': 'application/json'}, body: body);
-
-    var decode = json.decode(res.body);
-    if (res.statusCode == 200) {
-      // decode.forEach((item) => print(item.values.elementAt(0)));
-      removeFile();
+    if (res.statusCode != 404) {
+      var decode = json.decode(res.body);
+      if (res.statusCode == 200) {
+        // decode.forEach((item) => print(item.values.elementAt(0)));
+        removeFile();
+        return decode["message"];
+      }
       return decode["message"];
     }
-    return decode["message"];
+    return "Error in fetching";
   }
 
 //Cache Test

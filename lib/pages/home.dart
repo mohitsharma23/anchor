@@ -39,13 +39,15 @@ class _HomeState extends State<Home> {
     }
   }
 
-  saveAnchor(url) async {
+  Future<String> saveAnchor(url) async {
     var response = await _util.saveAnchor(url);
     if (response.runtimeType != String) {
       setState(() {
         data.addAll(response);
       });
+      return "Success";
     }
+    return "Error";
   }
 
   _launchURL(url) async {
@@ -103,12 +105,14 @@ class _HomeState extends State<Home> {
                         padding: const EdgeInsets.all(8.0),
                         child: RaisedButton(
                           child: Text("Add Anchor"),
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
                               // print(url);
-                              saveAnchor(url);
-                              Navigator.of(context).pop();
+                              String res = await saveAnchor(url);
+                              if (res == "Success") {
+                                Navigator.of(context).pop();
+                              }
                             }
                           },
                         ),
@@ -162,8 +166,10 @@ class _HomeState extends State<Home> {
                                 children: <Widget>[
                                   Text(
                                     this.data[index].values.elementAt(0),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.w500),
                                   ),
                                   Container(

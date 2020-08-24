@@ -142,6 +142,7 @@ class _ProfileState extends State<Profile> {
                         itemCount: this.anchors.length,
                         itemBuilder: (context, index) {
                           final item = this.anchors[index];
+                          var anchor = item.split('/');
                           return Dismissible(
                             key: Key(item),
                             onDismissed: (direction) async {
@@ -149,7 +150,9 @@ class _ProfileState extends State<Profile> {
                                 anchors.removeAt(index);
                               });
                               String msg = await util.removeAnchor(item);
-                              print(msg);
+                              Scaffold.of(context).showSnackBar(SnackBar(
+                                content: Text(msg),
+                              ));
                             },
                             background: Container(color: Colors.red),
                             child: Container(
@@ -157,7 +160,13 @@ class _ProfileState extends State<Profile> {
                                   border: Border(bottom: BorderSide())),
                               padding: EdgeInsets.all(2),
                               child: ListTile(
-                                title: Text(item),
+                                title: Text(
+                                  anchor[0].substring(12),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                leading: FaIcon(FontAwesomeIcons.anchor),
                               ),
                             ),
                           );
