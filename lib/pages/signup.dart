@@ -10,6 +10,7 @@ class Signup extends StatefulWidget {
 class _SignupState extends State<Signup> {
   String password;
   String confirmPass;
+  bool isLoading = false;
   final user = UserModel();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -18,12 +19,18 @@ class _SignupState extends State<Signup> {
   void validateForm() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      setState(() {
+        isLoading = true;
+      });
       String res = await auth.signupUser(user);
       if (res == "Success") {
         //navigate to home page
       } else {
         _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(res)));
       }
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -125,7 +132,7 @@ class _SignupState extends State<Signup> {
                     Container(
                       width: MediaQuery.of(context).size.width / 2.5,
                       child: RaisedButton(
-                          onPressed: validateForm,
+                          onPressed: isLoading ? null : validateForm,
                           color: Colors.grey[300],
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
@@ -133,7 +140,9 @@ class _SignupState extends State<Signup> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text('Get Started'),
-                                Icon(Icons.arrow_forward)
+                                isLoading
+                                    ? CircularProgressIndicator()
+                                    : Icon(Icons.arrow_forward)
                               ],
                             ),
                           )),

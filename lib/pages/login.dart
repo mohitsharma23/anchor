@@ -10,12 +10,16 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final user = UserModel();
   final _formKey = GlobalKey<FormState>();
+  bool isLoading = false;
   AuthSerivce auth = new AuthSerivce();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void validateForm() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
+      setState(() {
+        isLoading = true;
+      });
       String res = await auth.loginUser(user);
       if (res == "Success") {
         Navigator.pushNamed(context, '/home');
@@ -23,6 +27,9 @@ class _LoginState extends State<Login> {
       } else {
         _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(res)));
       }
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -86,14 +93,16 @@ class _LoginState extends State<Login> {
                     Container(
                       width: MediaQuery.of(context).size.width / 2.5,
                       child: RaisedButton(
-                          onPressed: validateForm,
+                          onPressed: isLoading ? null : validateForm,
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text('Sign In'),
-                                Icon(Icons.arrow_forward)
+                                isLoading
+                                    ? CircularProgressIndicator()
+                                    : Icon(Icons.arrow_forward)
                               ],
                             ),
                           )),
