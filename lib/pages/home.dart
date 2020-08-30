@@ -14,6 +14,7 @@ class _HomeState extends State<Home> {
   UtilService _util = new UtilService();
   String url;
   List data;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -62,67 +63,83 @@ class _HomeState extends State<Home> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            content: Stack(
-              overflow: Overflow.visible,
-              children: <Widget>[
-                Positioned(
-                  right: -40.0,
-                  top: -40.0,
-                  child: InkResponse(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: CircleAvatar(
-                      child: Icon(Icons.close),
-                      backgroundColor: Colors.teal,
+          return StatefulBuilder(builder: (context, StateSetter setState) {
+            return AlertDialog(
+              content: Stack(
+                overflow: Overflow.visible,
+                children: <Widget>[
+                  Positioned(
+                    right: -40.0,
+                    top: -40.0,
+                    child: InkResponse(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: CircleAvatar(
+                        child: Icon(Icons.close),
+                        backgroundColor: Colors.teal,
+                      ),
                     ),
                   ),
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return "Kindly enter the URL";
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              url = value;
-                            });
-                          },
-                          decoration: InputDecoration(hintText: 'google.com'),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: RaisedButton(
-                          child: Text("Add Anchor"),
-                          onPressed: () async {
-                            if (_formKey.currentState.validate()) {
-                              _formKey.currentState.save();
-                              // print(url);
-                              String res = await saveAnchor(url);
-                              if (res == "Success") {
-                                Navigator.of(context).pop();
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return "Kindly enter the URL";
                               }
-                            }
-                          },
+                              return null;
+                            },
+                            onSaved: (value) {
+                              setState(() {
+                                url = value;
+                              });
+                            },
+                            decoration: InputDecoration(hintText: 'google.com'),
+                          ),
                         ),
-                      )
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RaisedButton(
+                            child: isLoading
+                                ? SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : Text("Add Anchor"),
+                            onPressed: isLoading
+                                ? null
+                                : () async {
+                                    if (_formKey.currentState.validate()) {
+                                      _formKey.currentState.save();
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      // print(url);
+                                      String res = await saveAnchor(url);
+                                      if (res == "Success") {
+                                        Navigator.of(context).pop();
+                                        setState(() {
+                                          isLoading = false;
+                                        });
+                                      }
+                                    }
+                                  },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
+                ],
+              ),
+            );
+          });
         });
   }
 
@@ -137,59 +154,70 @@ class _HomeState extends State<Home> {
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : RefreshIndicator(
-              onRefresh: refreshFeedData,
-              child: ListView.builder(
-                  itemCount: this.data.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                      height: 100,
-                      width: double.maxFinite,
-                      child: InkWell(
-                        onTap: () {
-                          _launchURL(this.data[index].values.elementAt(1));
-                        },
-                        child: Card(
-                          elevation: 5,
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border(
-                                    top: BorderSide(
-                                        width: 2, color: Colors.teal))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    this.data[index].values.elementAt(0),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
+          : this.data.length == 0
+              ? Center(
+                  child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image(image: AssetImage('assets/Anchor.png')),
+                    // Text('No Anchors are present')
+                  ],
+                ))
+              : RefreshIndicator(
+                  onRefresh: refreshFeedData,
+                  child: ListView.builder(
+                      itemCount: this.data.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                          height: 100,
+                          width: double.maxFinite,
+                          child: InkWell(
+                            onTap: () {
+                              _launchURL(this.data[index].values.elementAt(1));
+                            },
+                            child: Card(
+                              elevation: 5,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        top: BorderSide(
+                                            width: 2, color: Colors.teal))),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text(
+                                        this.data[index].values.elementAt(0),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      Container(
+                                        width: double.maxFinite,
+                                        child: Text(
+                                          this.data[index].values.elementAt(2),
+                                          style: TextStyle(
+                                              fontSize: 12, color: Colors.grey),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      )
+                                    ],
                                   ),
-                                  Container(
-                                    width: double.maxFinite,
-                                    child: Text(
-                                      this.data[index].values.elementAt(2),
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.grey),
-                                      textAlign: TextAlign.end,
-                                    ),
-                                  )
-                                ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    );
-                  }),
-            ),
+                        );
+                      }),
+                ),
       floatingActionButton: FloatingActionButton(
           onPressed: _addAnchor, child: FaIcon(FontAwesomeIcons.anchor)),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
