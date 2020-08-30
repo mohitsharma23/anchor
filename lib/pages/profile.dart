@@ -137,42 +137,51 @@ class _ProfileState extends State<Profile> {
                         thickness: 1,
                       )),
                     ]),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: this.anchors.length,
-                        itemBuilder: (context, index) {
-                          final item = this.anchors[index];
-                          var anchor = item.split('/');
-                          return Dismissible(
-                            key: Key(item),
-                            onDismissed: (direction) async {
-                              setState(() {
-                                anchors.removeAt(index);
-                              });
-                              String msg = await util.removeAnchor(item);
-                              Scaffold.of(context).showSnackBar(SnackBar(
-                                content: Text(msg),
-                              ));
-                            },
-                            background: Container(color: Colors.red),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide())),
-                              padding: EdgeInsets.all(2),
-                              child: ListTile(
-                                title: Text(
-                                  anchor[0].substring(12),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                leading: FaIcon(FontAwesomeIcons.anchor),
-                              ),
+                    this.anchors.length == 0
+                        ? Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Text("No Anchors are present"),
+                              ],
                             ),
-                          );
-                        },
-                      ),
-                    ),
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                              itemCount: this.anchors.length,
+                              itemBuilder: (context, index) {
+                                final item = this.anchors[index];
+                                var anchor = item.split('/');
+                                return Dismissible(
+                                  key: Key(item),
+                                  onDismissed: (direction) async {
+                                    setState(() {
+                                      anchors.removeAt(index);
+                                    });
+                                    String msg = await util.removeAnchor(item);
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                      content: Text(msg),
+                                    ));
+                                  },
+                                  background: Container(color: Colors.red),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border: Border(bottom: BorderSide())),
+                                    padding: EdgeInsets.all(2),
+                                    child: ListTile(
+                                      title: Text(
+                                        anchor[0].substring(12),
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                      leading: FaIcon(FontAwesomeIcons.anchor),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                   ],
                 )
         ]),

@@ -23,7 +23,7 @@ class _LoginState extends State<Login> {
       String res = await auth.loginUser(user);
       if (res == "Success") {
         Navigator.pushNamed(context, '/home');
-        print('Home Page');
+        // print('Home Page');
       } else {
         _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(res)));
       }

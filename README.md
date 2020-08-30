@@ -16,7 +16,7 @@ Todo List:
 - [x] Display all anchors on Profile Page
 - [ ] Delete Cached File after specific Time
 - [ ] Dark Mode
-- [ ] Design UI of Anchors page
+- [x] Design UI of Anchors page
 - [ ] Design Settings page
 - [x] Deploy Node API to Heroku & MongoDB to Atlas DB
 

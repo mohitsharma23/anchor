@@ -24,7 +24,7 @@ class _SignupState extends State<Signup> {
       });
       String res = await auth.signupUser(user);
       if (res == "Success") {
-        //navigate to home page
+        Navigator.pushNamed(context, '/home');
       } else {
         _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(res)));
       }
@@ -141,7 +141,10 @@ class _SignupState extends State<Signup> {
                               children: <Widget>[
                                 Text('Get Started'),
                                 isLoading
-                                    ? CircularProgressIndicator()
+                                    ? SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator())
                                     : Icon(Icons.arrow_forward)
                               ],
                             ),

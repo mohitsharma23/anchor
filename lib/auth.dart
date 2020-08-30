@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:rss_reader/models/User.dart';
+import 'package:rss_reader/util.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import './config.dart';
 
 class AuthSerivce {
   final String baseURL = API;
+  UtilService _util = new UtilService();
 
   Future<String> loginUser(UserModel user) async {
     Map map = {"email": user.email, "password": user.password};
@@ -84,6 +86,7 @@ class AuthSerivce {
   Future<bool> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("token");
+    _util.removeFile();
     return true;
   }
 }
