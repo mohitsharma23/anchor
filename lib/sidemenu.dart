@@ -43,7 +43,7 @@ class SideMenu extends StatelessWidget {
               style: TextStyle(
                   color: ModalRoute.of(context).settings.name == HOME
                       ? Colors.white
-                      : Colors.black),
+                      : Colors.teal),
             ),
             onTap: () {
               if (ModalRoute.of(context).settings.name != HOME) {
@@ -68,7 +68,7 @@ class SideMenu extends StatelessWidget {
               style: TextStyle(
                   color: ModalRoute.of(context).settings.name == SETTINGS
                       ? Colors.white
-                      : Colors.black),
+                      : Colors.teal),
             ),
             onTap: () {
               if (ModalRoute.of(context).settings.name != SETTINGS) {
@@ -82,7 +82,10 @@ class SideMenu extends StatelessWidget {
             Icons.exit_to_app,
             color: Colors.teal,
           ),
-          title: Text('Logout'),
+          title: Text(
+            'Logout',
+            style: TextStyle(color: Colors.teal),
+          ),
           onTap: () {
             auth.signOut().then((res) {
               if (res == true) {
