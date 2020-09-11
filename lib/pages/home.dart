@@ -14,6 +14,7 @@ class _HomeState extends State<Home> {
   UtilService _util = new UtilService();
   String url;
   List data;
+  String feedError;
   bool isLoading = false;
 
   @override
@@ -48,7 +49,7 @@ class _HomeState extends State<Home> {
       });
       return "Success";
     }
-    return "Error";
+    return response;
   }
 
   _launchURL(url) async {
@@ -60,6 +61,9 @@ class _HomeState extends State<Home> {
   }
 
   void _addAnchor() {
+    this.setState(() {
+      feedError = null;
+    });
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -103,6 +107,13 @@ class _HomeState extends State<Home> {
                             decoration: InputDecoration(hintText: 'google.com'),
                           ),
                         ),
+                        !this.isLoading && this.feedError != null
+                            ? Text(
+                                this.feedError,
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 12),
+                              )
+                            : Container(),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: RaisedButton(
@@ -125,10 +136,14 @@ class _HomeState extends State<Home> {
                                       String res = await saveAnchor(url);
                                       if (res == "Success") {
                                         Navigator.of(context).pop();
-                                        setState(() {
-                                          isLoading = false;
+                                      } else {
+                                        this.setState(() {
+                                          feedError = res;
                                         });
                                       }
+                                      setState(() {
+                                        isLoading = false;
+                                      });
                                     }
                                   },
                           ),

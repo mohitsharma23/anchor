@@ -38,7 +38,7 @@ class UtilService {
     final res = await http.post(this.baseURL + "addanchor",
         headers: {'Content-Type': 'application/json'}, body: body);
 
-    if (res.statusCode != 404) {
+    if (res.statusCode != 404 && res.statusCode != 503) {
       var decode = json.decode(res.body);
       if (res.statusCode == 200) {
         appendToFile(json.encode(decode));
@@ -58,7 +58,7 @@ class UtilService {
     final res = await http.post(this.baseURL + "getfeed",
         headers: {'Content-Type': 'application/json'}, body: body);
 
-    if (res.statusCode != 404) {
+    if (res.statusCode != 404 || res.statusCode != 503) {
       var decode = json.decode(res.body);
       if (res.statusCode == 200) {
         // decode.forEach((item) => print(item.values.elementAt(0)));
@@ -79,7 +79,7 @@ class UtilService {
     final res = await http.post(this.baseURL + "getanchors",
         headers: {'Content-Type': 'application/json'}, body: body);
 
-    if (res.statusCode != 404) {
+    if (res.statusCode != 404 || res.statusCode != 503) {
       var decode = json.decode(res.body);
       if (res.statusCode == 200) {
         // decode.forEach((item) => print(item.values.elementAt(0)));
@@ -98,7 +98,7 @@ class UtilService {
 
     final res = await http.post(this.baseURL + "removeanchor",
         headers: {'Content-Type': 'application/json'}, body: body);
-    if (res.statusCode != 404) {
+    if (res.statusCode != 404 || res.statusCode != 503) {
       var decode = json.decode(res.body);
       if (res.statusCode == 200) {
         // decode.forEach((item) => print(item.values.elementAt(0)));

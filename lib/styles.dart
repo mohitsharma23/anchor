@@ -5,11 +5,11 @@ class Styles {
   static ThemeData themeData(bool isDarkTheme, BuildContext context) {
     return ThemeData(
       primarySwatch: Colors.teal,
-      primaryColor: isDarkTheme ? Colors.black : Colors.white,
+      primaryColor: isDarkTheme ? Colors.black : Colors.teal,
       backgroundColor: isDarkTheme ? Colors.black : Colors.white,
       indicatorColor: isDarkTheme ? Color(0xff0E1D36) : Color(0xffCBDCF8),
       buttonColor: isDarkTheme ? Colors.white : Color(0xffF1F5FB),
-      hintColor: isDarkTheme ? Colors.white : Color(0xffEECED3),
+      hintColor: isDarkTheme ? Colors.white : Colors.grey,
       highlightColor: isDarkTheme ? Color(0xff372901) : Color(0xffFCE192),
       hoverColor: isDarkTheme ? Color(0xff3A3A3B) : Color(0xff4285F4),
       focusColor: isDarkTheme ? Color(0xff0B2512) : Color(0xffA8DAB5),
