@@ -8,7 +8,6 @@ import 'package:rss_reader/pages/profile.dart';
 import 'package:rss_reader/pages/settings.dart';
 import 'package:rss_reader/pages/signup.dart';
 import 'package:rss_reader/styles.dart';
-import 'package:rss_reader/util.dart';
 import './config.dart';
 
 void main() => runApp(MyApp());

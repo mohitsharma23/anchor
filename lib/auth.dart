@@ -70,7 +70,7 @@ class AuthSerivce {
     if (prefs.containsKey("token")) {
       String token = prefs.getString("token");
 
-      Map map = {token: token};
+      Map map = {"token": token};
       String body = json.encode(map);
 
       final res = await http.post(this.baseURL + "verifyUser",

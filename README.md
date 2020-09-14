@@ -16,8 +16,8 @@ Todo List:
 - [x] Display all anchors on Profile Page
 - [x] Dark Mode
 - [x] Design UI of Anchors page
-- [ ] Design Settings page
 - [x] Deploy Node API to Heroku & MongoDB to Atlas DB
+- [ ] Implement Favorites
 
 ## Screeshots
 
